@@ -94,5 +94,32 @@ def delete_image(request, image_id):
         return redirect(my_profile)
     else:
         raise Http404()
-    
+
+
+@login_required(login_url='/accounts/login/')
+def update_caption(request, image_id):
+    current_user = request.user
+    try:
+        profile = Profile.objects.get(account_holder = current_user)
+    except Profile.DoesNotExist:
+        raise Http404()
+
+    try:
+        image = Image.objects.get(id = image_id)
+    except Image.DoesNotExist:
+        raise Http404()
+
+    if image.profile == profile:
+        if 'newcaption' in request.GET and request.GET["newcaption"]:
+            new_caption = request.GET.get("newcaption")
+            image.caption = new_caption
+            image.update_caption()
+            return redirect(my_profile)
+        else:
+            return render(request, 'update-caption.html', {"image":image})
+
+    else:
+        raise Http404()
+
+
 
