@@ -122,4 +122,18 @@ def update_caption(request, image_id):
         raise Http404()
 
 
+@login_required(login_url='/accounts/login/')
+def change_profile_photo(request):
+    current_user = request.user
+    try:
+        profile = Profile.objects.get(account_holder = current_user)
+    except Profile.DoesNotExist:
+        raise Http404()
+    
+    if request.method == 'POST':
+        profile.profile_photo = request.FILES['img']        
+        profile.update_profile()
+        return redirect(my_profile)
+    
+    return render(request, 'update-prof-pic.html')
 

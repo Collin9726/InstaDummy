@@ -12,6 +12,7 @@ urlpatterns=[
     url(r'^uploadimage/$',views.upload_image,name = 'upload-image'),
     url(r'^deleteimage/(\d+)',views.delete_image,name = 'delete-image'),
     url(r'^updatecaption/(\d+)',views.update_caption,name = 'update-caption'),
+    url(r'^changeprofilephoto/$',views.change_profile_photo,name = 'change-profile-photo'),
 ]
 if settings.DEBUG:
     urlpatterns+= static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
