@@ -137,3 +137,17 @@ def change_profile_photo(request):
     
     return render(request, 'update-prof-pic.html')
 
+
+@login_required(login_url='/accounts/login/')
+def delete_profile(request):
+    current_user = request.user
+    try:
+        profile = Profile.objects.get(account_holder = current_user)
+    except Profile.DoesNotExist:
+        raise Http404()
+
+    profile.delete_profile()
+    current_user.delete()
+    
+    return redirect(welcome)
+
