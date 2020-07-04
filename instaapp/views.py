@@ -13,6 +13,7 @@ def welcome(request):
 def home(request):
 
     return render(request, 'home-page.html')
+    
 
 @login_required(login_url='/accounts/login/')
 def send_email(request):
