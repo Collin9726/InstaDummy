@@ -74,5 +74,25 @@ def upload_image(request):
     else:
         form = NewImageForm()
     return render(request, 'upload-image.html', {"form": form})
+
+
+@login_required(login_url='/accounts/login/')
+def delete_image(request, image_id):
+    current_user = request.user
+    try:
+        profile = Profile.objects.get(account_holder = current_user)
+    except Profile.DoesNotExist:
+        raise Http404()
+
+    try:
+        image = Image.objects.get(id = image_id)
+    except Image.DoesNotExist:
+        raise Http404()   
+
+    if image.profile == profile:
+        image.delete_image()
+        return redirect(my_profile)
+    else:
+        raise Http404()
     
 
