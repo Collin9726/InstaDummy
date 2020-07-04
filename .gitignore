@@ -2,4 +2,3 @@
 virtual/
 *.pyc
 .vscode
-instaproject/settings.py
