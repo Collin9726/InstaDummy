@@ -3,7 +3,7 @@ from django.http  import HttpResponse,Http404,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from .email import send_signup_email
-from .forms import NewProfileForm
+from .forms import NewProfileForm, NewImageForm
 from .models import Profile, Image, Comment
 
 # Create your views here.
@@ -53,5 +53,25 @@ def my_profile(request):
         raise Http404()
 
     return render(request, 'my-profile.html', {"profile": profile})
+
+
+@login_required(login_url='/accounts/login/')
+def upload_image(request):
+    current_user = request.user
+    try:
+        profile = Profile.objects.get(account_holder = current_user)
+    except Profile.DoesNotExist:
+        raise Http404()
+    if request.method == 'POST':
+        form = NewImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            this_image = form.save(commit=False)
+            this_image.profile = profile
+            this_image.save()
+        return redirect(my_profile)
+
+    else:
+        form = NewImageForm()
+    return render(request, 'upload-image.html', {"form": form})
     
 

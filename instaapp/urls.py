@@ -9,6 +9,7 @@ urlpatterns=[
     url(r'^sendemail/$',views.send_email,name = 'send-email'),
     url(r'^createprofile/$',views.create_profile,name = 'create-profile'),
     url(r'^myprofile/$',views.my_profile,name = 'my-profile'),
+    url(r'^uploadimage/$',views.upload_image,name = 'upload-image'),
 ]
 if settings.DEBUG:
     urlpatterns+= static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

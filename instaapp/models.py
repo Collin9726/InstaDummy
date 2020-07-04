@@ -26,8 +26,8 @@ class Profile(models.Model):
 
 class Image(models.Model):    
     posted = models.DateTimeField(auto_now_add=True)
-    url = models.ImageField(upload_to = 'posts/')
-    name = models.CharField(max_length =30)
+    image_upload = models.ImageField(upload_to = 'posts/')
+    image_name = models.CharField(max_length =30)
     caption = models.TextField()
     profile = models.ForeignKey(Profile,on_delete=models.CASCADE)
     likes = models.IntegerField(default=0)
@@ -35,7 +35,7 @@ class Image(models.Model):
     
 
     def __str__(self):
-        return self.name
+        return self.image_name
 
     def save_image(self):
         self.save()
@@ -50,11 +50,11 @@ class Image(models.Model):
 
 class Comment(models.Model): 
     posted = models.DateTimeField(auto_now_add=True)
-    comment_text = models.TextField()
+    comment = models.TextField()
     image = models.ForeignKey(Image,on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.comment_text 
+        return self.comment 
 
     def save_comment(self):
         self.save()
