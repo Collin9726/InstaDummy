@@ -51,8 +51,9 @@ def my_profile(request):
         profile = Profile.objects.get(account_holder = current_user)
     except Profile.DoesNotExist:
         raise Http404()
+    images = Image.objects.filter(profile = profile).order_by('-posted')    
 
-    return render(request, 'my-profile.html', {"profile": profile})
+    return render(request, 'my-profile.html', {"profile": profile, "images": images})
 
 
 @login_required(login_url='/accounts/login/')
