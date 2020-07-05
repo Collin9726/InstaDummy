@@ -9,7 +9,7 @@
             <div class="jumbotron text-center">
                 <h1>InstaDummy</h1>
                 {% if user.is_authenticated %}
-                <a href="{% url 'home' %}"><button class="btn btn-primary">View photos</button></a>
+                <a href="/home/0"><button class="btn btn-primary">View photos</button></a>
                 {% else %}
                 <a href="/accounts/register"><button class="btn btn-primary">Sign Up</button></a>
                 <a href="/accounts/login"><button class="btn btn-primary">Log In</button></a>

@@ -4,8 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from .email import send_signup_email
-from .forms import NewProfileForm, NewImageForm, NewFollowForm, NewUnfollowForm
-from .models import Profile, Image, Comment, Follow
+from .forms import NewProfileForm, NewImageForm, NewFollowForm, NewUnfollowForm, NewLikeForm, NewUnlikeForm
+from .models import Profile, Image, Comment, Follow, Like
 
 # Create your views here.
 def welcome(request):      
@@ -14,7 +14,7 @@ def welcome(request):
 
 
 @login_required(login_url='/accounts/login/')
-def home(request):
+def home(request, image_id):
     current_user = request.user 
     pk_list=[]
     try:
@@ -33,8 +33,54 @@ def home(request):
             pk_list.append(image.id)
 
     timeline_images = Image.objects.filter(pk__in = pk_list).order_by('-posted')
+    
 
-    return render(request, 'home-page.html', {"images": timeline_images})
+    if request.method == 'POST':
+        if 'liking' in request.POST:
+            form = NewLikeForm(request.POST)
+            if form.is_valid():
+                this_like = form.save(commit=False)
+                try:
+                    image_liked = Image.objects.get(id = image_id)
+                except Image.DoesNotExist:
+                    raise Http404()
+                is_liked = Like.objects.filter(image = image_liked, profile = profile_mine)
+                if is_liked:
+                    return HttpResponseRedirect('/home/0')
+                this_like.image = image_liked
+                this_like.profile = profile_mine
+                this_like.save()
+                set_of_likes=Like.objects.filter(image = image_liked)
+                num_of_likes=len(set_of_likes)
+                image_liked.likes=num_of_likes
+                image_liked.save()                
+                
+            return HttpResponseRedirect('/home/0')
+        
+        elif 'unliking' in request.POST:
+            form = NewUnlikeForm(request.POST)
+            if form.is_valid():
+                this_unlike = form.save(commit=False)
+                try:
+                    image_unliked = Image.objects.get(id = image_id)
+                except Image.DoesNotExist:
+                    raise Http404()
+                is_unliked = Like.objects.filter(image = image_unliked, profile = profile_mine)
+                if is_unliked:
+                    is_unliked.delete()
+                set_of_likes=Like.objects.filter(image = image_unliked)
+                num_of_likes=len(set_of_likes)
+                image_unliked.likes=num_of_likes
+                image_unliked.save() 
+                
+            return HttpResponseRedirect('/home/0')
+
+    else:
+        form_like = NewLikeForm()
+        form_unlike = NewUnlikeForm
+
+    
+    return render(request, 'home-page.html', {"images": timeline_images, "form_like":form_like, "form_unlike":form_unlike})
 
 
 @login_required(login_url='/accounts/login/')
@@ -267,5 +313,7 @@ def user_profile(request, profile_id):
     return render(request, 'user-profile.html', {"profile": profile, "images": images, "follow_form": form_follow})
 
     
+
+
 
 

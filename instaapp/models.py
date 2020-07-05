@@ -73,4 +73,13 @@ class Follow(models.Model):
 
     def __str__(self):
         return self.pk 
+
+
+class Like(models.Model): 
+    posted = models.DateTimeField(auto_now_add=True)
+    image = models.ForeignKey(Image, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.pk 
     

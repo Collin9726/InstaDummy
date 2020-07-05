@@ -5,7 +5,7 @@ from . import views
 
 urlpatterns=[
     url(r'^$',views.welcome,name = 'welcome'),
-    url(r'^home/$',views.home,name = 'home'),
+    url(r'^home/(\d+)',views.home,name = 'home'),
     url(r'^sendemail/$',views.send_email,name = 'send-email'),
     url(r'^createprofile/$',views.create_profile,name = 'create-profile'),
     url(r'^myprofile/$',views.my_profile,name = 'my-profile'),

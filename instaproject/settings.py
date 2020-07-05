@@ -159,7 +159,7 @@ django_heroku.settings(locals())
 
 LOGIN_URL = "/accounts/login/" # this is the name of the url
 LOGOUT_REDIRECT_URL = "/"
-LOGIN_REDIRECT_URL = "/home" 
+LOGIN_REDIRECT_URL = "/home/0" 
 
 EMAIL_USE_TLS = config('EMAIL_USE_TLS')
 EMAIL_HOST = config('EMAIL_HOST')

@@ -1,4 +1,6 @@
 {%extends 'base.html'%}
+{% load bootstrap3 %} 
+{% load static %}
 
 {% block content %}
 {{block.super}}
@@ -37,12 +39,22 @@
                             <div class="card-body">
                                 <h5>Posted by: {{image.profile.account_holder.username}}</h5>
                                 <h5>Likes: {{image.likes}}</h5>
+                                <form  action="/home/{{image.id}}" method="post">
+                                    {%csrf_token%}                                        
+                                    {% bootstrap_form form_unlike%}
+                                    <input type="submit" class="btn btn-info" name="liking" value="Like">
+                                </form>
+                                <form  action="/home/{{image.id}}" method="post">
+                                    {%csrf_token%}                                        
+                                    {% bootstrap_form form_unlike%}
+                                    <input type="submit" class="btn btn-warning" name="unliking" value="Unlike">
+                                </form>
                                 <h5 class="card-title">{{image.image_name}}</h5>
                                 <h6 class="card-subtitle mb-2 text-muted">{{image.posted}}</h6>
                                 <p class="card-text">{{image.caption}}</p>                                                                                 
                             </div>
                         </div>
-                    </div>
+                    </div>             
                     {% endfor %}
 
                     {% else %}
