@@ -1,0 +1,63 @@
+{%extends 'base.html'%}
+
+{% block content %}
+{{block.super}}
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="jumbotron">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h1 class="text-center">{{profile.account_holder.username}}'s Profile</h1>                        
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <img src="{{profile.profile_photo.url}}" alt="{{profile.account_holder.username}}">                        
+                    </div>
+                    <div class="col-xs-4">
+                        <h2>{{profile.account_holder.username}}</h2>
+                        <h4>Followers: {{profile.followers}} | Following: {{profile.following}}</h4>
+                        <h4 class="text-muted">Joined on {{profile.created}}</h4>
+                        <p>{{profile.bio}}</p>
+                    </div>
+                    <div class="col-xs-4"></div>
+                </div>              
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="jumbotron">
+                <div class="row">
+                    {% if images %}
+
+                    {% for image in images %}
+                    <div class="col-xs-4">
+                        <div class="card">
+                            <img class="card-img-top" src="{{image.image_upload.url}}" alt="{{image.image_name}}">
+                            <div class="card-body">
+                                <h5>Likes: {{image.likes}}</h5>
+                                <h5 class="card-title">{{image.image_name}}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">{{image.posted}}</h6>
+                                <p class="card-text">{{image.caption}}</p>                                                                                 
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    {% else %}
+                    <div class="col-xs-12 text-center">
+                        <p>No images posted yet.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

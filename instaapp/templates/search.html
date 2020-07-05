@@ -13,7 +13,7 @@
                 <p>{{blank_message}}</p> 
                 {% else %}    
                     {% if profile %}
-                    <a href="#">{{profile.account_holder.username}}</a>
+                    <a href="/userprofile/{{profile.id}}">{{profile.account_holder.username}}</a>
                     {% else %}
                     <p>No user with a username "{{message}}"</p>  
                     {% endif %} 
