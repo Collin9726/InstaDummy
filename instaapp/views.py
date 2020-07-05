@@ -15,8 +15,26 @@ def welcome(request):
 
 @login_required(login_url='/accounts/login/')
 def home(request):
+    current_user = request.user 
+    pk_list=[]
+    try:
+        profile_mine = Profile.objects.get(account_holder = current_user)
+    except Profile.DoesNotExist:
+        raise Http404()
+    my_images = Image.objects.filter(profile = profile_mine)
+    for image in my_images:
+        pk_list.append(image.id)
 
-    return render(request, 'home-page.html')
+    i_follow = Follow.objects.filter(follower = profile_mine)
+    for prof in i_follow:
+        their_profile = prof.followed
+        their_images = Image.objects.filter(profile = their_profile)
+        for image in their_images:
+            pk_list.append(image.id)
+
+    timeline_images = Image.objects.filter(pk__in = pk_list).order_by('-posted')
+
+    return render(request, 'home-page.html', {"images": timeline_images})
 
 
 @login_required(login_url='/accounts/login/')

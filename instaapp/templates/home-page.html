@@ -23,4 +23,37 @@
     </div>
 </div>
 
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="jumbotron">
+                <div class="row">
+                    {% if images %}
+
+                    {% for image in images %}
+                    <div class="col-xs-4">
+                        <div class="card">
+                            <img class="card-img-top" src="{{image.image_upload.url}}" alt="{{image.image_name}}">
+                            <div class="card-body">
+                                <h5>Posted by: {{image.profile.account_holder.username}}</h5>
+                                <h5>Likes: {{image.likes}}</h5>
+                                <h5 class="card-title">{{image.image_name}}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">{{image.posted}}</h6>
+                                <p class="card-text">{{image.caption}}</p>                                                                                 
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    {% else %}
+                    <div class="col-xs-12">
+                        <h3>Follow users and upload photos to have posts on your timeline.</h3>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
