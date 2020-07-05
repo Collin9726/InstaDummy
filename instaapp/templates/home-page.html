@@ -11,6 +11,13 @@
                 <h2>Home page</h2>
                 <a href="/logout"><button class="btn btn-secondary">Log Out</button></a>
                 <a href="{% url 'my-profile' %}"><button class="btn btn-secondary">My profile</button></a>
+                <br>
+                <form role="search" action="{% url 'search-profile' %}">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search User" name="uname">                        
+                    </div>
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </form>
             </div>
         </div>
     </div>

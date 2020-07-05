@@ -14,6 +14,7 @@ urlpatterns=[
     url(r'^updatecaption/(\d+)',views.update_caption,name = 'update-caption'),
     url(r'^changeprofilephoto/$',views.change_profile_photo,name = 'change-profile-photo'),
     url(r'^deleteprofile/$',views.delete_profile,name = 'delete-profile'),
+    url(r'^search/$',views.search_profile,name = 'search-profile'),
 ]
 if settings.DEBUG:
     urlpatterns+= static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

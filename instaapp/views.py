@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http  import HttpResponse,Http404,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.models import User
 from .email import send_signup_email
 from .forms import NewProfileForm, NewImageForm
 from .models import Profile, Image, Comment
@@ -150,4 +151,32 @@ def delete_profile(request):
     current_user.delete()
     
     return redirect(welcome)
+
+
+@login_required(login_url='/accounts/login/')
+def search_profile(request):
+    users=User.objects.all()    
+
+    if 'uname' in request.GET and request.GET["uname"]:
+        search_term = request.GET.get("uname")        
+        this_user=None
+        try:
+            this_user = User.objects.get(username__icontains=search_term)            
+        except User.DoesNotExist:
+            pass 
+
+        profile = None
+        try:
+            profile = Profile.objects.get(account_holder = this_user) 
+        except Profile.DoesNotExist:
+            pass          
+        
+        message = f"{search_term}"
+
+        return render(request, 'search.html',{"message":message, "profile":profile})
+
+    else:
+        blank_message = "You haven't searched for any user."
+        return render(request, 'search.html',{"blank_message":blank_message})
+
 

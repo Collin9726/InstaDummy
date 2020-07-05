@@ -12,7 +12,7 @@
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="caption">Update caption</label>                        
-                        <Textarea class="form-control" name="newcaption" rows="5">{{ image.caption }}</Textarea>                  
+                        <Textarea class="form-control" name="newcaption" rows="3">{{ image.caption }}</Textarea>                  
                     </div>
                     <input type="submit" class="btn btn-primary" value="Update">
                 </form>                

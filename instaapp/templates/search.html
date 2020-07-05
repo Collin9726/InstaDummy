@@ -1,0 +1,27 @@
+{%extends 'base.html'%}
+
+{% block content %}
+{{block.super}}
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3"></div>
+        <div class="col-xs-6">
+            <div class="jumbotron">
+                <h2>Search results</h2>
+                {% if blank_message %}    
+                <p>{{blank_message}}</p> 
+                {% else %}    
+                    {% if profile %}
+                    <a href="#">{{profile.account_holder.username}}</a>
+                    {% else %}
+                    <p>No user with a username "{{message}}"</p>  
+                    {% endif %} 
+                {% endif %}    
+            </div>
+        </div>
+        <div class="col-xs-3"></div>
+    </div>
+</div>
+
+{% endblock %}
