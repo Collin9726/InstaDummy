@@ -1,5 +1,5 @@
 from django import forms
-from .models import Profile, Image, Comment
+from .models import Profile, Image, Comment, Follow
 
 class NewProfileForm(forms.ModelForm):
     class Meta:
@@ -10,3 +10,8 @@ class NewImageForm(forms.ModelForm):
     class Meta:
         model = Image
         exclude = ['posted', 'profile', 'likes']
+
+class NewFollowForm(forms.ModelForm):
+    class Meta:
+        model = Follow
+        exclude = ['followed', 'follower']

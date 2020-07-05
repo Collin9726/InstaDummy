@@ -4,8 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from .email import send_signup_email
-from .forms import NewProfileForm, NewImageForm
-from .models import Profile, Image, Comment
+from .forms import NewProfileForm, NewImageForm, NewFollowForm
+from .models import Profile, Image, Comment, Follow
 
 # Create your views here.
 def welcome(request):      
@@ -187,10 +187,74 @@ def user_profile(request, profile_id):
         profile = Profile.objects.get(id = profile_id)
     except Profile.DoesNotExist:
         raise Http404()
+    try:
+        profile_following = Profile.objects.get(account_holder = current_user)
+    except Profile.DoesNotExist:
+        raise Http404()
+    try:
+        profile_followed = Profile.objects.get(id = profile_id)
+    except Profile.DoesNotExist:
+        raise Http404()
     
     if profile.account_holder==current_user:
         return redirect(my_profile)
-    
-    images = Image.objects.filter(profile = profile).order_by('-posted')    
 
-    return render(request, 'user-profile.html', {"profile": profile, "images": images})
+    if request.method == 'POST':
+        form = NewFollowForm(request.POST)
+        if form.is_valid():
+            this_follow = form.save(commit=False)
+            this_follow.followed=profile_followed
+            this_follow.follower=profile_following
+            this_follow.save()
+            set_of_followers=Follow.objects.filter(followed = profile_followed)
+            num_of_followers=len(set_of_followers)
+            profile_followed.followers=num_of_followers
+            profile_followed.save()
+            set_of_following=Follow.objects.filter(follower = profile_following)
+            num_of_following=len(set_of_following)
+            profile_following.following=num_of_following
+            profile_following.save()
+        return HttpResponseRedirect(f'/userprofile/{profile_id}')
+
+    else:
+        form = NewFollowForm()
+    
+    images = Image.objects.filter(profile = profile).order_by('-posted')  
+
+    is_following = Follow.objects.filter(followed = profile_followed, follower = profile_following)  
+
+    if is_following:
+        return render(request, 'user-profile.html', {"profile": profile, "images": images})
+
+    return render(request, 'user-profile.html', {"profile": profile, "images": images, "form": form})
+
+    
+
+
+# @login_required(login_url='/accounts/login/')
+# def follow_user(request, profile_id): 
+#     current_user = request.user 
+#     try:
+#         profile_following = Profile.objects.get(account_holder = current_user)
+#     except Profile.DoesNotExist:
+#         raise Http404()
+#     try:
+#         profile_followed = Profile.objects.get(id = profile_id)
+#     except Profile.DoesNotExist:
+#         raise Http404()
+
+#     if request.method == 'POST':
+#         form = NewFollowForm(request.POST)
+#         if form.is_valid():
+#             this_follow = form.save(commit=False)
+#             this_follow.followed=profile_followed
+#             this_follow.follower=profile_following
+#             this_follow.save()
+#         return HttpResponseRedirect(f'/profile/{profile_id}')
+
+#     else:
+#         form = NewFollowForm()
+#     return render(request, 'upload-image.html', {"form": form})
+    
+
+     
