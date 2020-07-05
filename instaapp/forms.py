@@ -15,3 +15,8 @@ class NewFollowForm(forms.ModelForm):
     class Meta:
         model = Follow
         exclude = ['followed', 'follower']
+
+class NewUnfollowForm(forms.ModelForm):
+    class Meta:
+        model = Follow
+        exclude = ['followed', 'follower']

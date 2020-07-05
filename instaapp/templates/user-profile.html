@@ -12,12 +12,20 @@
                 <div class="row">
                     <div class="col-xs-12 text-center">
                         <h1 class="text-center">{{profile.account_holder.username}}'s Profile</h1>  
-                        {% if form %}                      
+                        {% if follow_form %}                      
                         <form  action="/userprofile/{{profile.id}}" method="post">
                             {%csrf_token%}
                         
-                            {% bootstrap_form form%}
-                            <input type="submit" class="btn btn-primary" value="Follow">
+                            {% bootstrap_form follow_form%}
+                            <input type="submit" class="btn btn-primary" name="follow" value="Follow">
+                        </form>
+                        {% endif %}
+                        {% if unfollow_form %}                      
+                        <form  action="/userprofile/{{profile.id}}" method="post">
+                            {%csrf_token%}
+                        
+                            {% bootstrap_form unfollow_form%}
+                            <input type="submit" class="btn btn-danger" name="unfollow" value="Unfollow">
                         </form>
                         {% endif %}
                         <hr>
