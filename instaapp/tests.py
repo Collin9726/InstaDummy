@@ -144,3 +144,25 @@ class FollowTestClass(TestCase):
     # Testing  instance
     def test_instance(self):
         self.assertTrue(isinstance(self.this_follow,Follow))
+
+
+class LikeTestClass(TestCase):
+    # Set up method
+    def setUp(self):
+        self.this_user =User.objects.create_user('mimi', 'mimi@gmail.com', 'moringa')        
+        self.this_profile = Profile(bio='bio', account_holder= self.this_user)
+        self.this_profile.save_profile()
+        self.this_image = Image(image_name='myimage', caption='mycaption', profile = self.this_profile)
+        self.this_image.save_image()
+        self.this_like = Like(image = self.this_image, profile = self.this_profile)
+        
+    def tearDown(self):
+        Profile.objects.all().delete()
+        Image.objects.all().delete()
+        User.objects.all().delete()
+        Like.objects.all().delete()
+        
+
+    # Testing  instance
+    def test_instance(self):
+        self.assertTrue(isinstance(self.this_like,Like))
