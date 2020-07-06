@@ -10,7 +10,7 @@ from .models import Profile, Image, Comment, Follow, Like
 # Create your views here.
 def welcome(request):      
     
-    return render(request, 'welcome.html')
+    return HttpResponseRedirect('/home/0')
 
 
 @login_required(login_url='/accounts/login/')

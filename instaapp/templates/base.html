@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="https://www.freepnglogos.com/uploads/logo-ig-png/png-logo-ig-instagram-social-media-icon-instagram-icon-icon-29.png" />
     {% if title %}
     <title>InstaDummy - {{title}}</title>
     {% else %}
@@ -17,6 +18,7 @@
     {% endblock %}
 </head>
 <body>    
+    {% include "navbar.html" %}
     {% block content %}
         <!--content here-->
     {% endblock %}
