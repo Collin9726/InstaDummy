@@ -124,4 +124,23 @@ class CommentTestClass(TestCase):
         comments = Comment.objects.all()
         self.assertTrue(len(comments) == 0)
 
-    
+
+class FollowTestClass(TestCase):
+    # Set up method
+    def setUp(self):
+        self.user1 =User.objects.create_user('mimi', 'mimi@gmail.com', 'moringa')        
+        self.profile1 = Profile(bio='bio', account_holder= self.user1)
+        self.profile1.save_profile()
+        self.user2 =User.objects.create_user('yeye', 'yeye@gmail.com', 'andela')        
+        self.profile2 = Profile(bio='bio2', account_holder= self.user2)
+        self.profile2.save_profile()
+        self.this_follow = Follow (followed = self.profile1, follower = self.profile2 )
+        
+    def tearDown(self):
+        Profile.objects.all().delete()        
+        User.objects.all().delete()
+        
+
+    # Testing  instance
+    def test_instance(self):
+        self.assertTrue(isinstance(self.this_follow,Follow))
