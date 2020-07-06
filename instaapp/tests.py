@@ -88,3 +88,40 @@ class ImageTestClass(TestCase):
         for img in query_set:
             updated_image = img
         self.assertEqual(updated_image.image_name, 'otherName')
+
+
+class CommentTestClass(TestCase):
+    # Set up method
+    def setUp(self):
+        self.this_user =User.objects.create_user('mimi', 'mimi@gmail.com', 'moringa')        
+        self.this_profile = Profile(bio='bio', account_holder= self.this_user)
+        self.this_profile.save_profile()
+        self.this_image = Image(image_name='myimage', caption='mycaption', profile = self.this_profile)
+        self.this_image.save_image()
+        self.this_comment = Comment(your_comment = 'mycomment', image = self.this_image, commented_by= self.this_profile)
+
+    def tearDown(self):
+        Profile.objects.all().delete()
+        Image.objects.all().delete()
+        User.objects.all().delete()
+        Comment.objects.all().delete()
+
+    # Testing  instance
+    def test_instance(self):
+        self.assertTrue(isinstance(self.this_comment,Comment))
+
+    # Testing Save Method
+    def test_save_comment_method(self):
+        self.this_comment.save_comment()
+        comments = Comment.objects.all()
+        self.assertTrue(len(comments) > 0)
+
+    # Testing Delete Method
+    def test_delete_comment_method(self):
+        self.this_comment.save_comment()
+        comment = Comment.objects.get(your_comment ='mycomment')
+        comment.delete_comment()
+        comments = Comment.objects.all()
+        self.assertTrue(len(comments) == 0)
+
+    

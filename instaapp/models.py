@@ -63,10 +63,7 @@ class Comment(models.Model):
     def delete_comment(self):
         self.delete()
 
-    def update_comment(self):
-        self.save()
-
-
+   
 class Follow(models.Model): 
     posted = models.DateTimeField(auto_now_add=True)
     followed = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='profile_followed')
