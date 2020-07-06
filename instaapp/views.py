@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from .email import send_signup_email
-from .forms import NewProfileForm, NewImageForm, NewFollowForm, NewUnfollowForm, NewLikeForm, NewUnlikeForm
+from .forms import NewProfileForm, NewImageForm, NewFollowForm, NewUnfollowForm, NewLikeForm, NewUnlikeForm, NewCommentForm
 from .models import Profile, Image, Comment, Follow, Like
 
 # Create your views here.
@@ -33,6 +33,7 @@ def home(request, image_id):
             pk_list.append(image.id)
 
     timeline_images = Image.objects.filter(pk__in = pk_list).order_by('-posted')
+    comments = Comment.objects.order_by('-posted')
     
 
     if request.method == 'POST':
@@ -75,12 +76,28 @@ def home(request, image_id):
                 
             return HttpResponseRedirect('/home/0')
 
+        elif 'comment' in request.POST:
+            form = NewCommentForm(request.POST)
+            if form.is_valid():
+                this_comment = form.save(commit=False)
+                print(this_comment.your_comment)
+                this_comment.commented_by = profile_mine
+                try:
+                    image_commented = Image.objects.get(id = image_id)
+                except Image.DoesNotExist:
+                    raise Http404()
+                this_comment.image = image_commented
+                this_comment.save()                
+                
+            return HttpResponseRedirect('/home/0')
+
     else:
         form_like = NewLikeForm()
-        form_unlike = NewUnlikeForm
+        form_unlike = NewUnlikeForm()
+        form_comment = NewCommentForm()
 
     
-    return render(request, 'home-page.html', {"images": timeline_images, "form_like":form_like, "form_unlike":form_unlike})
+    return render(request, 'home-page.html', {"images": timeline_images, "form_like":form_like, "form_unlike":form_unlike, "form_comment":form_comment, "comments":comments})
 
 
 @login_required(login_url='/accounts/login/')
@@ -225,7 +242,7 @@ def search_profile(request):
         search_term = request.GET.get("uname")        
         this_user=None
         try:
-            this_user = User.objects.get(username__icontains=search_term)            
+            this_user = User.objects.get(username = search_term)            
         except User.DoesNotExist:
             pass 
 

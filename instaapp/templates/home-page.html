@@ -51,7 +51,19 @@
                                 </form>
                                 <h5 class="card-title">{{image.image_name}}</h5>
                                 <h6 class="card-subtitle mb-2 text-muted">{{image.posted}}</h6>
-                                <p class="card-text">{{image.caption}}</p>                                                                                 
+                                <p class="card-text">{{image.caption}}</p>    
+                                <form  action="/home/{{image.id}}" method="post">
+                                    {%csrf_token%}                                        
+                                    {% bootstrap_form form_comment%}
+                                    <input type="submit" class="btn btn-primary" name="comment" value="Comment">
+                                </form>  
+                                {% for comment in comments %}
+                                    {% if comment.image == image %}
+                                    <h5>{{comment.your_comment}}</h5>
+                                    <h6>- {{comment.commented_by.account_holder.username}}</h6>
+                                    <h6>{{comment.posted}}</h6>
+                                    {% endif %}
+                                {% endfor %}                                                                           
                             </div>
                         </div>
                     </div>             

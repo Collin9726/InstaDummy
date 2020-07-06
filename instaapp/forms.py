@@ -30,3 +30,9 @@ class NewUnlikeForm(forms.ModelForm):
     class Meta:
         model = Like
         exclude = ['image', 'profile']
+
+
+class NewCommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        exclude = ['posted', 'image', 'commented_by']

@@ -50,8 +50,9 @@ class Image(models.Model):
 
 class Comment(models.Model): 
     posted = models.DateTimeField(auto_now_add=True)
-    comment = models.TextField()
+    your_comment = models.CharField(max_length =150)
     image = models.ForeignKey(Image,on_delete=models.CASCADE)
+    commented_by = models.ForeignKey(Profile,on_delete=models.CASCADE)
 
     def __str__(self):
         return self.comment 
