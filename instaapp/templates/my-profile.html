@@ -3,62 +3,95 @@
 {% block content %}
 {{block.super}}
 
-<div class="container">
+<div class="container home-pg">
     <div class="row">
-        <div class="col-xs-12">
-            <div class="jumbotron">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <h1 class="text-center">My Profile</h1>
-                        <a href="{%url 'delete-profile'%}"><p class="text-sm text-danger text-center">Delete profile</p></a>
-                        <hr>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-4">
-                        <img src="{{profile.profile_photo.url}}" alt="{{profile.account_holder.username}}">
-                        <a href="{%url 'change-profile-photo'%}">Change photo</a>
-                    </div>
-                    <div class="col-xs-4">
-                        <h2>{{profile.account_holder.username}}</h2>
-                        <h4>Followers: {{profile.followers}} | Following: {{profile.following}}</h4>
-                        <h4 class="text-muted">Joined on {{profile.created}}</h4>
-                        <p>{{profile.bio}}</p>
-                    </div>
-                    <div class="col-xs-4">
-                        <a href="{%url 'upload-image'%}"><button class="btn btn-primary">Upload Image</button></a>
-                    </div>
-                </div>              
-            </div>
+        <div class="col-xs-3 prof-pic">
+            <img src="{{profile.profile_photo.url}}" alt="{{profile.account_holder.username}}">
+        </div>
+        <div class="col-xs-1"></div>
+        <div class="col-xs-4">
+            <h2>{{profile.account_holder.username}}</h2>
+            <p><span class="bolden">Bio: </span>{{profile.bio}}</p>
+            <h5>Followers: <span class="bolden">{{profile.followers}}</span></h5>
+            <h5>Following: <span class="bolden">{{profile.following}}</span></h5>
+            <h5 class="text-muted">Joined on {{profile.created}}</h5>            
+        </div>
+        <div class="col-xs-4">
+            <br>
+            <h4 class="bolden">Account options</h4>
+            <ul>
+                <li><h5><a href="{%url 'upload-image'%}">Upload image</a></h5></li>
+                <li><h5><a href="{%url 'change-profile-photo'%}">Change profile photo</a></h5></li> 
+                <li><h5><a href="{%url 'delete-profile'%}">Delete profile</a></h5></li>   
+                <li><h5><a href="/logout">Log out</a></h5></li>            
+            </ul>
         </div>
     </div>
+</div>
+<hr>
+<div class="container welcome-pg">
     <div class="row">
         <div class="col-xs-12">
             <div class="jumbotron">
-                <div class="row">
-                    {% if images %}
+                <div class="row display-flex prof-images">
+                    <div class="col-xs-12 col-md-4">  
+                        {% if images %}
+    
+                        {% for image in images %}
+                        <div class="card">                            
+                            <!--Trigger modal-->
+                            <a data-toggle="modal" data-target="#{{image.id}}"><img class="card-img-top hover-pointer" src="{{image.image_upload.url}}" alt="{{image.image_name}}"></a>                                
+                            <div>
+                                <!-- Modal -->
+                                <div class="modal fade" id="{{image.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-xlg" role="document">
+                                        <div class="modal-content">   
+                                            <div class="modal-header">                                            
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>                                                           
+                                            </div>                           
 
-                    {% for image in images %}
-                    <div class="col-xs-4">
-                        <div class="card">
-                            <img class="card-img-top" src="{{image.image_upload.url}}" alt="{{image.image_name}}">
-                            <div class="card-body">
-                                <h5>Likes: {{image.likes}}</h5>
-                                <h5 class="card-title">{{image.image_name}}</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">{{image.posted}}</h6>
-                                <p class="card-text">{{image.caption}}</p>
-                                <a href="/updatecaption/{{image.id}}"><button class="btn btn-primary">Update caption</button></a>
-                                <a href="/deleteimage/{{image.id}}"><button class="btn btn-danger">Delete</button></a>                                                    
+                                            <div class="modal-body">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-xs-12 col-md-8">
+                                                            <img src="{{image.image_upload.url}}" alt="{{image.image_name}}"> 
+                                                            <div class="row">                                                                
+                                                                <div class="col-xs-12"><h5 class="bolden">Likes {{image.likes}}</h5></div>
+                                                                <div class="col-xs-2">
+                                                                    <h5 class="text-muted photo-link"><a href="/updatecaption/{{image.id}}">Update</a></h5>
+                                                                </div>
+                                                                <div class="col-xs-2">
+                                                                    <h5 class="text-muted photo-link"><a href="/deleteimage/{{image.id}}">Delete</a></h5>
+                                                                </div>                                                                
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-md-4">
+                                                            <h4><b>{{image.image_name}}</b></h4>                                                                
+                                                            <p><b>"</b>{{image.caption}}<b>"</b></p>
+                                                            <h5 class="text-muted"><b>{{image.posted}}</b></h5>  
+                                                            <hr>                                                              
+                                                            {% for comment in comments %}
+                                                                {% if comment.image == image %}
+                                                                <h5><span class="bolden">{{comment.commented_by.account_holder.username}} </span>{{comment.your_comment}}</h5>                                                                    
+                                                                <h6 class="text-muted">{{comment.posted}}</h6>
+                                                                {% endif %}
+                                                            {% endfor %}                                                              
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>                                        
+                                        </div>
+                                    </div>
+                                </div>                                                                                                            
                             </div>
                         </div>
-                    </div>
-                    {% endfor %}
+                        {% endfor %}
 
-                    {% else %}
-                    <div class="col-xs-12 text-center">
-                        <p>No images posted yet.</p>
+                        {% endif %}
+                                     
                     </div>
-                    {% endif %}
                 </div>
             </div>
         </div>

@@ -5,79 +5,150 @@
 {% block content %}
 {{block.super}}
 
-<div class="container">
+<div class="container welcome-pg home-pg">
     <div class="row">
-        <div class="col-xs-12">
-            <div class="jumbotron text-center">
-                <h1>InstaDummy</h1>
-                <h2>Home page</h2>
-                <a href="/logout"><button class="btn btn-secondary">Log Out</button></a>
-                <a href="{% url 'my-profile' %}"><button class="btn btn-secondary">My profile</button></a>
-                <br>
-                <form role="search" action="{% url 'search-profile' %}">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search User" name="uname">                        
-                    </div>
-                    <button class="btn btn-primary" type="submit">Search</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="container">
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="jumbotron">
-                <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-xs-12 col-md-10">
+            <div class="row">
+                <div class="col-xs-12 col-md-8">  
                     {% if images %}
 
                     {% for image in images %}
-                    <div class="col-xs-4">
-                        <div class="card">
-                            <img class="card-img-top" src="{{image.image_upload.url}}" alt="{{image.image_name}}">
-                            <div class="card-body">
-                                <h5>Posted by: {{image.profile.account_holder.username}}</h5>
-                                <h5>Likes: {{image.likes}}</h5>
-                                <form  action="/home/{{image.id}}" method="post">
-                                    {%csrf_token%}                                        
-                                    {% bootstrap_form form_unlike%}
-                                    <input type="submit" class="btn btn-info" name="liking" value="Like">
-                                </form>
-                                <form  action="/home/{{image.id}}" method="post">
-                                    {%csrf_token%}                                        
-                                    {% bootstrap_form form_unlike%}
-                                    <input type="submit" class="btn btn-warning" name="unliking" value="Unlike">
-                                </form>
-                                <h5 class="card-title">{{image.image_name}}</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">{{image.posted}}</h6>
-                                <p class="card-text">{{image.caption}}</p>    
-                                <form  action="/home/{{image.id}}" method="post">
-                                    {%csrf_token%}                                        
-                                    {% bootstrap_form form_comment%}
-                                    <input type="submit" class="btn btn-primary" name="comment" value="Comment">
-                                </form>  
-                                {% for comment in comments %}
-                                    {% if comment.image == image %}
-                                    <h5>{{comment.your_comment}}</h5>
-                                    <h6>- {{comment.commented_by.account_holder.username}}</h6>
-                                    <h6>{{comment.posted}}</h6>
-                                    {% endif %}
-                                {% endfor %}                                                                           
+                    <div class="row padding">
+                        <div class="col-xs-12">
+                            <div class="card">
+                                <div class="card-body card-body-top">
+                                    <div class="row">
+                                        <div class="col-xs-2">
+                                            <div class="row">
+                                                <div class="col-xs-8">
+                                                    <div class="prof-pic">
+                                                        <img src="{{image.profile.profile_photo.url}}" alt="avatar">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-4">
+                                                    <a href="/userprofile/{{image.profile.id}}"><h5 class="bolden">{{image.profile.account_holder.username}}</h5></a>                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-10"></div>
+                                    </div>                                    
+                                </div>
+                                <!--Trigger modal-->
+                                <a data-toggle="modal" data-target="#{{image.id}}"><img class="card-img-top hover-pointer" src="{{image.image_upload.url}}" alt="{{image.image_name}}"></a>                                
+                                <div class="card-body margin-sm">  
+                                    <div class="row">
+                                        <div class="col-xs-1">
+                                            <form  action="/home/{{image.id}}" method="post">
+                                                {%csrf_token%}                                        
+                                                {% bootstrap_form form_like%}                                        
+                                                <button type="submit" class="btn btn-default-like btn-lg" name="liking"><span class="fa fa-heart"></span></button>
+                                            </form>
+                                        </div>
+                                        <div class="col-xs-1">
+                                            <a data-toggle="modal" data-target="#{{image.id}}"><button class="btn btn-default-comment btn-lg hover-pointer"><span class="fa fa-comment"></span></button></a>                                            
+                                        </div>
+                                    </div>
+
+                                    <h5 class="bolden">Likes {{image.likes}}</h5>                                   
+                                    <p class="card-title"><span class="bolden">{{image.profile.account_holder.username}} </span>{{image.image_name}}</p>
+                                    <a data-toggle="modal" data-target="#{{image.id}}"><h5 class="text-muted hover-pointer">... more</h5></a>                                    
+                                    <h6 class="card-subtitle mb-2 text-muted">{{image.posted}}</h6>                                    
+
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="{{image.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-xlg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">                                            
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                    <a href="/userprofile/{{image.profile.id}}"><h5 class="bolden modal-title" id="exampleModalLongTitle">{{image.profile.account_holder.username}}</h5></a>                                                    
+                                                </div>
+
+                                                <div class="modal-body">
+                                                    <div class="container-fluid">
+                                                        <div class="row">
+                                                            <div class="col-xs-12 col-md-8">
+                                                                <img src="{{image.image_upload.url}}" alt="{{image.image_name}}"> 
+                                                                <div class="row">
+                                                                    <div class="col-xs-12">
+                                                                        <form  action="/home/{{image.id}}" method="post">
+                                                                            {%csrf_token%}                                        
+                                                                            {% bootstrap_form form_like%}                                        
+                                                                            <button type="submit" class="btn btn-default-like btn-lg" name="liking"><span class="fa fa-heart"></span></button>
+                                                                        </form>
+                                                                    </div>
+                                                                    <div class="col-xs-12"><h5 class="bolden">Likes {{image.likes}}</h5></div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xs-12 col-md-4">
+                                                                <h4><b>{{image.image_name}}</b></h4>                                                                
+                                                                <p><b>"</b>{{image.caption}}<b>"</b></p>
+                                                                <h5 class="text-muted"><b>{{image.posted}}</b></h5>  
+                                                                <hr>
+                                                                <form  action="/home/{{image.id}}" method="post">
+                                                                    {%csrf_token%}                                        
+                                                                    {% bootstrap_form form_comment%}
+                                                                    <input type="submit" class="btn btn-primary" name="comment" value="Post">
+                                                                </form>  
+                                                                {% for comment in comments %}
+                                                                    {% if comment.image == image %}
+                                                                    <h5><span class="bolden">{{comment.commented_by.account_holder.username}} </span>{{comment.your_comment}}</h5>                                                                    
+                                                                    <h6 class="text-muted">{{comment.posted}}</h6>
+                                                                    {% endif %}
+                                                                {% endfor %}                                                              
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>                                        
+                                            </div>
+                                        </div>
+                                    </div>                                                                                                            
+                                </div>
+                            </div>
+                        </div> 
+                    </div>  
+                    {% endfor %}  
+                    {% else %}
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <h3>Follow users and upload photos to have posts on your timeline.</h3>
+                        </div>
+                    </div>
+                    {% endif %}              
+                </div>
+                <div class="col-md-4 fixed">
+                    <div class="jumbotron">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h4 class="bolden text-muted">Suggestions for you</h4>
+                                <hr>
                             </div>
                         </div>
-                    </div>             
-                    {% endfor %}
+                        {% for prof in suggested_profiles %}
+                        {% if prof == profile_mine %}
 
-                    {% else %}
-                    <div class="col-xs-12">
-                        <h3>Follow users and upload photos to have posts on your timeline.</h3>
+                        {% else %}
+                        <div class="row suggestions">
+                            <div class="col-xs-3">
+                                <a href="/userprofile/{{prof.id}}"><img src="{{prof.profile_photo.url}}" alt="avatar"></a>
+                            </div>
+                            <div class="col-xs-9">
+                                <h5 class="bolden"><a href="/userprofile/{{prof.id}}">{{prof.account_holder.username}}</a></h5>
+                            </div>
+                        </div>
+                        <br>
+                        {% endif %}
+                        {% endfor %}
                     </div>
-                    {% endif %}
                 </div>
             </div>
         </div>
+        <div class="col-md-1"></div>
     </div>
 </div>
+
 
 {% endblock %}

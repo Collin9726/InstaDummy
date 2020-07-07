@@ -96,8 +96,10 @@ def home(request, image_id):
         form_unlike = NewUnlikeForm()
         form_comment = NewCommentForm()
 
+    suggested_profiles = Profile.objects.all()[:5]
+
     
-    return render(request, 'home-page.html', {"images": timeline_images, "form_like":form_like, "form_unlike":form_unlike, "form_comment":form_comment, "comments":comments})
+    return render(request, 'home-page.html', {"images": timeline_images, "form_like":form_like, "form_unlike":form_unlike, "form_comment":form_comment, "comments":comments, "suggested_profiles":suggested_profiles, "profile_mine":profile_mine})
 
 
 @login_required(login_url='/accounts/login/')
@@ -133,9 +135,10 @@ def my_profile(request):
         profile = Profile.objects.get(account_holder = current_user)
     except Profile.DoesNotExist:
         raise Http404()
-    images = Image.objects.filter(profile = profile).order_by('-posted')    
+    images = Image.objects.filter(profile = profile).order_by('-posted')
+    comments = Comment.objects.order_by('-posted')    
 
-    return render(request, 'my-profile.html', {"profile": profile, "images": images})
+    return render(request, 'my-profile.html', {"profile": profile, "comments":comments, "images": images})
 
 
 @login_required(login_url='/accounts/login/')
@@ -322,12 +325,13 @@ def user_profile(request, profile_id):
     
     images = Image.objects.filter(profile = profile).order_by('-posted')  
 
-    is_following = Follow.objects.filter(followed = profile_followed, follower = profile_following)  
+    is_following = Follow.objects.filter(followed = profile_followed, follower = profile_following) 
+    comments = Comment.objects.order_by('-posted')   
 
     if is_following:
-        return render(request, 'user-profile.html', {"profile": profile, "images": images, "unfollow_form": form_unfollow})
+        return render(request, 'user-profile.html', {"profile": profile, "images": images, "comments":comments, "unfollow_form": form_unfollow})
 
-    return render(request, 'user-profile.html', {"profile": profile, "images": images, "follow_form": form_follow})
+    return render(request, 'user-profile.html', {"profile": profile, "images": images, "comments":comments, "follow_form": form_follow})
 
     
 

@@ -72,8 +72,8 @@ html, body{
 
 .welcome-pg .jumbotron{
   background-color: transparent;
-  padding-right: 0em;
-  padding-left: 0em;
+  padding-right: 1em;
+  padding-left: 1em;
   font-size: larger;
 }
 
@@ -83,7 +83,7 @@ html, body{
   font-weight: bold;
 }
 
-.welcome-pg .card{
+.welcome-pg .card-body{
   background-color: white;
   padding: 5%;
   border: lightgray solid 1px;
@@ -93,8 +93,113 @@ html, body{
   font-size: medium;
 }
 
+.padding{
+  margin-top: 1em;
+  margin-bottom: 2em;
+}
+
+.home-pg{
+  padding-top: 4%;
+}
+
+.home-pg a{
+  color: inherit;
+}
+
+.photo-link a{
+  color: inherit;
+}
+
+.card-body-top{
+  padding: 0.5em !important;
+}
+
+.prof-pic img{
+  border-radius: 50%;
+}
+
+.suggestions img{
+  border-radius: 50%;
+}
+
+.bolden{
+  font-weight: bold;
+}
+
+.margin-sm{
+  padding-top: 0.5em !important;
+}
+
+.btn-default-like{
+  background-color: transparent;
+  border-color: transparent;
+  padding-bottom: 0em;
+  margin-bottom: 0em;
+}
+
+.btn-default-like:hover{
+  color: brown;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.btn-default-comment{
+  background-color: transparent;
+  border-color: transparent;
+  padding-bottom: 0em;
+  margin-bottom: 0em;
+}
+
+.btn-default-comment:hover{
+  color: rgb(49, 48, 48);
+  background-color: transparent;
+  border-color: transparent;
+}
 
 
+.modal {
+  text-align: center;
+}
+
+.modal-body p{
+  font-size: medium;
+}
+
+.modal-body img{
+  height: auto !important;
+}
+
+@media screen and (min-width: 768px) { 
+  .modal:before {
+      display: inline-block;
+      vertical-align: middle;
+      content: " ";
+      height: 100%;
+  }
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.modal-xlg {
+  width: 70%;     
+}
+
+.hover-pointer:hover{
+  cursor: pointer;
+}
+
+.row.display-flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.thumbnail {
+  height: 100%;
+}
 
 
 img {
@@ -102,4 +207,5 @@ img {
     object-fit: cover;
   }
   
+
 
