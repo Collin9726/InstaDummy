@@ -1,3 +1,5 @@
+[![codebeat badge](https://codebeat.co/badges/dac4d8b3-2489-4bd8-b869-b95ef190ece8)](https://codebeat.co/projects/github-com-collin9726-instadummy-master)
+
 # Instadummy
 #### A dummy of Instagram web app made with Django, 07/07/2020
 #### By [Collin Owino](https://github.com/Collin9726)
