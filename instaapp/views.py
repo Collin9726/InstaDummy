@@ -154,7 +154,7 @@ def upload_image(request):
             this_image = form.save(commit=False)
             this_image.profile = profile
             this_image.save()
-        return redirect(my_profile)
+        return HttpResponseRedirect('/home/0')
 
     else:
         form = NewImageForm()
