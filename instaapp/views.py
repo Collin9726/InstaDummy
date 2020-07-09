@@ -20,7 +20,7 @@ def home(request, image_id):
     try:
         profile_mine = Profile.objects.get(account_holder = current_user)
     except Profile.DoesNotExist:
-        raise Http404()
+        return redirect(create_profile)
     my_images = Image.objects.filter(profile = profile_mine)
     for image in my_images:
         pk_list.append(image.id)
@@ -134,7 +134,7 @@ def my_profile(request):
     try:
         profile = Profile.objects.get(account_holder = current_user)
     except Profile.DoesNotExist:
-        raise Http404()
+        return redirect(create_profile)
     images = Image.objects.filter(profile = profile).order_by('-posted')
     comments = Comment.objects.order_by('-posted')    
 
